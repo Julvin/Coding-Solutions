@@ -75,3 +75,13 @@ SELECT cte2.start_date, cte4.end_date
 FROM cte2
 JOIN cte4 USING(rnk)
 ORDER BY DATEDIFF(cte2.start_date,cte4.end_date) DESC
+
+2. Symmetric Pairs
+SELECT f1.x, f1.y
+FROM functions f1
+JOIN functions f2
+    ON f1.x = f2.y
+   AND f1.y = f2.x
+GROUP BY f1.x, f1.y
+HAVING COUNT(f1.x) > 1 OR f1.x < f1.y
+ORDER BY f1.x ASC;
