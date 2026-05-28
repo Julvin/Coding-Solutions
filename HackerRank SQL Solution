@@ -127,3 +127,19 @@ SELECT IF(g.grade < 8, NULL, Name), grade, marks
 FROM students s
 lEFT JOIN grades g ON s.marks BETWEEN min_mark AND max_mark
 ORDER BY grade DESC, name ASC, marks ASC 
+
+2. Top Company
+WITH CTE AS(
+    SELECT s.hacker_id, count(*) as cnt
+    FROM submissions s
+    LEFT JOIN challenges c USING(challenge_id)
+    LEFT JOIN difficulty d USING(difficulty_level)
+    WHERE s.score = d.score
+    GROUP BY s.hacker_id
+)
+
+SELECT h.hacker_id, h.name
+FROM hackers h
+JOIN CTE USING(hacker_id)
+WHERE cnt > 1
+ORDER BY cnt DESC, hacker_id ASC
