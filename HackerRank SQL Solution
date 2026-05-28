@@ -119,3 +119,11 @@ JOIN CTE3 using(college_id)
 GROUP BY c.contest_id, c.hacker_id, c.name
 HAVING SUM(ts) + SUM(ac) + SUM(tv) + SUM(uv) > 0
 ORDER BY c.contest_id;
+
+**Basic Join**
+
+1. The Report
+SELECT IF(g.grade < 8, NULL, Name), grade, marks
+FROM students s
+lEFT JOIN grades g ON s.marks BETWEEN min_mark AND max_mark
+ORDER BY grade DESC, name ASC, marks ASC 
