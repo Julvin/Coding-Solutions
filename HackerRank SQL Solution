@@ -1,4 +1,4 @@
-ADVANCE SELECT
+**ADVANCE SELECT**
 
 1. New Companies
 
@@ -47,3 +47,31 @@ JOIN manager m USING(company_code)
 JOIN employee e USING(company_code)
 GROUP BY c.company_code, c.founder
 ORDER BY c.company_code
+
+
+**ADVANCE JOIN**
+
+1. SQL Project Planning
+WITH cte1 AS (
+    SELECT start_date
+    FROM projects
+    WHERE start_date NOT IN (SELECT End_Date FROM projects)
+),
+cte2 AS (
+    SELECT start_date, RANK() OVER(ORDER BY start_date) AS rnk
+    FROM cte1
+),
+cte3 AS (
+    SELECT end_date
+    FROM projects
+    WHERE end_date NOT IN (SELECT start_date FROM projects)
+),
+cte4 AS (
+    SELECT end_date, RANK() OVER(ORDER BY end_date) AS rnk
+    FROM cte3
+)
+
+SELECT cte2.start_date, cte4.end_date
+FROM cte2
+JOIN cte4 USING(rnk)
+ORDER BY DATEDIFF(cte2.start_date,cte4.end_date) DESC
