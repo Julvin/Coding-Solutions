@@ -143,3 +143,22 @@ FROM hackers h
 JOIN CTE USING(hacker_id)
 WHERE cnt > 1
 ORDER BY cnt DESC, hacker_id ASC
+
+**ALternative Queries**
+1. Print Prime Numbers
+WITH RECURSIVE numbers AS(
+    SELECT 2 AS L
+    UNION ALL
+    
+    SELECT L + 1
+    FROM numbers
+    WHERE L < 1000
+)
+
+SELECT GROUP_CONCAT(L SEPARATOR "&") 
+FROM numbers n 
+WHERE NOT EXISTS(
+    SELECT *
+    FROM numbers n2
+    WHERE n2.L > 1 AND n2.L < n.l AND n.L % n2.L = 0
+)
