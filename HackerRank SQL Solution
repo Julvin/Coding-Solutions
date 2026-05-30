@@ -170,6 +170,21 @@ HAVING
     )
 ORDER BY cnt DESC, h.hacker_id ASC
 
+4. Ollivander's Inventory
+WITH a AS(
+SELECT age, MIN(coins_needed) as coins_needed, power
+FROM wands w
+JOIN 
+    (SELECT * FROM wands_property WHERE is_evil = 0) AS wp USING(code)
+GROUP BY age, power
+)
+
+SELECT w.id, a.age, a.coins_needed, a.power
+FROM wands w
+JOIN wands_property wp USING(code)
+JOIN a USING(age, coins_needed, power)
+ORDER BY a.power DESC, a.age DESC
+
 **ALternative Queries**
 1. Print Prime Numbers
 WITH RECURSIVE numbers AS(
