@@ -144,6 +144,32 @@ JOIN CTE USING(hacker_id)
 WHERE cnt > 1
 ORDER BY cnt DESC, hacker_id ASC
 
+3. Challenges
+SELECT h.hacker_id, h.name, count(challenge_id) as cnt
+FROM hackers h
+JOIN challenges c USING(hacker_id)
+GROUP BY h.hacker_id, h.name
+HAVING 
+    count(challenge_id) = (
+        SELECT count(c1.challenge_id)
+        FROM challenges c1
+        GROUP BY c1.hacker_id
+        ORDER BY count(c1.challenge_id) DESC
+        LIMIT 1
+    ) OR
+    count(challenge_id) IN (
+        SELECT cnt1
+        FROM (
+            SELECT h.hacker_id, h.name, count(challenge_id) as cnt1
+            FROM hackers h
+            JOIN challenges c USING(hacker_id)
+            GROUP BY h.hacker_id, h.name
+        ) as temp
+        GROUP BY cnt1
+        HAVING count(cnt1) = 1
+    )
+ORDER BY cnt DESC, h.hacker_id ASC
+
 **ALternative Queries**
 1. Print Prime Numbers
 WITH RECURSIVE numbers AS(
