@@ -48,6 +48,17 @@ JOIN employee e USING(company_code)
 GROUP BY c.company_code, c.founder
 ORDER BY c.company_code;
 
+2. Binary Tree
+SELECT 
+    N,
+    CASE 
+        WHEN P IS NULL THEN "Root"
+        WHEN N IN (SELECT DISTINCT P FROM BST WHERE P IS NOT NULL) THEN "Inner"
+        ELSE "Leaf"
+    END AS b
+FROM BST
+ORDER BY N ASC
+
 
 **ADVANCE JOIN**
 
@@ -184,6 +195,20 @@ FROM wands w
 JOIN wands_property wp USING(code)
 JOIN a USING(age, coins_needed, power)
 ORDER BY a.power DESC, a.age DESC
+
+5. Contest Leaderboard
+WITH CTE AS(
+    SELECT hacker_id, challenge_id, max(score) as ms
+    FROM submissions
+    GROUP BY hacker_id, challenge_id 
+)
+
+SELECT h.hacker_id, h.name, SUM(ms)
+FROM hackers h
+JOIN CTE c USING(hacker_id)
+GROUP BY h.hacker_id, h.name
+HAVING SUM(ms) > 0
+ORDER BY SUM(ms) DESC, h.hacker_id ASC
 
 **ALternative Queries**
 1. Print Prime Numbers
