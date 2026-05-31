@@ -3,4 +3,4 @@ Here is the collection of the coding questions I have solved over time. I would 
 | Platform | Python Solutions| MySQL Solutions |
 | -------- | -------- | -------- |
 | LeetCode | 93 | 75 |
-| HackerRank | - | 13 |
+| HackerRank | - | 14 |
