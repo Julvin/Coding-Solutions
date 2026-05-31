@@ -243,6 +243,19 @@ SELECT REPEAT('* ', L)
 FROM NUMBER
 ORDER BY L DESC
 
+3. Draw the Triangle 2
+WITH RECURSIVE number AS(
+    SELECT 1 AS L
+    UNION ALL
+    
+    SELECT L + 1
+    FROM number
+    WHERE L < 20
+)
+
+SELECT REPEAT('* ', L)
+FROM number
+
 **Aggregation**
 
 1. Weather Observation Station 20
