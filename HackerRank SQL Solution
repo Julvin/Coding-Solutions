@@ -228,3 +228,30 @@ WHERE NOT EXISTS(
     FROM numbers n2
     WHERE n2.L > 1 AND n2.L < n.l AND n.L % n2.L = 0
 )
+
+
+**Aggregation**
+
+1. Weather Observation Station 20
+
+Solution 1
+WITH CTE AS (
+    SELECT 
+            LAT_N, 
+            ROW_NUMBER() OVER (ORDER BY LAT_N) AS rn,
+            COUNT(*) OVER () AS total
+    FROM station
+)
+
+SELECT ROUND(AVG(LAT_N), 4)
+FROM CTE
+WHERE rn IN (
+    FLOOR((total + 1) / 2), 
+    FLOOR((total + 2) / 2)
+);
+
+Solution 2
+SET @row_count = (SELECT CAST(FLOOR(COUNT(*)/2) AS signed) FROM STATION);
+PREPARE STMT FROM 'SELECT ROUND(lat_N, 4) FROM station ORDER BY lat_N LIMIT 1 OFFSET?';
+
+EXECUTE STMT USING @row_count 
