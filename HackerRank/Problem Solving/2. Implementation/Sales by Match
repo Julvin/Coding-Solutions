@@ -1,0 +1,10 @@
+def sockMerchant(n, ar):
+    scr = [0] * (max(ar)+1)
+    for i in ar:
+        scr[i] += 1
+    
+    pair = [] 
+    for i in scr:
+        pair.append(math.floor(i/2))
+    
+    return sum(pair)
