@@ -1,0 +1,13 @@
+def getMoneySpent(keyboards, drives, b):
+    pay = []
+    
+    for k in keyboards:
+        for d in drives:
+            pay.append(k + d)
+    
+    mp = [i for i in pay if i<=b]
+    
+    if not mp:
+        return -1
+    else:
+        return max(mp)
