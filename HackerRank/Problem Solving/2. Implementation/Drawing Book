@@ -1,0 +1,9 @@
+def pageCount(n, p):
+    maxn = math.ceil((abs(p-n))/2)
+    minn = math.ceil(abs((p-1))/2)
+    oddn = math.floor((abs(p-n))/2)
+    
+    if n%2 == 0:
+        return min(maxn,minn)
+    else:
+        return min(oddn,minn)  
