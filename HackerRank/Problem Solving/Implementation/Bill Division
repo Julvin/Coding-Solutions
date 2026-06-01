@@ -1,0 +1,9 @@
+def bonAppetit(bill, k, b):
+    bon = 0
+    for i in range(len(bill)):
+        if i != k:
+            bon += bill[i]
+    if bon/2 == b:
+        print("Bon Appetit")
+    else: 
+        print(int(abs(bon/2 - b)))
