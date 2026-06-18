@@ -1,6 +1,7 @@
 #A median is defined as a number separating the higher half of a data set from the lower half. 
 #Query the median of the Northern Latitudes (LAT_N) from STATION and round your answer to 4 decimal places.
 
+#Solution 1
 WITH CTE AS(
     SELECT 
         lat_N,
@@ -15,3 +16,10 @@ WHERE rnk IN (
     floor((cnt+1)/2),
     floor((cnt+2)/2)
 )
+
+
+#Solution 2
+SET @row_count = (SELECT CAST(FLOOR(COUNT(*)/2) AS signed) FROM STATION);
+PREPARE STMT FROM 'SELECT ROUND(lat_N, 4) FROM station ORDER BY lat_N LIMIT 1 OFFSET?';
+
+EXECUTE STMT USING @row_count 
