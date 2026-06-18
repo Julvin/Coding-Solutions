@@ -1,0 +1,30 @@
+#Projects, columns: Task_ID, Start_Date and End_Date. 
+--Guaranteed that the difference between the End_Date and the Start_Date = 1 day for each row
+--If the End_Date of the tasks are consecutive, then they are part of the same project.
+
+#Query the start and end dates of projects listed by the number of days it took to complete the project in ascending order. 
+#More than one project that have the same number of completion days, order by the start date of the project.
+
+WITH cte1 AS (
+    SELECT start_date
+    FROM projects
+    WHERE start_date NOT IN (SELECT End_Date FROM projects)
+),
+cte2 AS (
+    SELECT start_date, RANK() OVER(ORDER BY start_date) AS rnk
+    FROM cte1
+),
+cte3 AS (
+    SELECT end_date
+    FROM projects
+    WHERE end_date NOT IN (SELECT start_date FROM projects)
+),
+cte4 AS (
+    SELECT end_date, RANK() OVER(ORDER BY end_date) AS rnk
+    FROM cte3
+)
+
+SELECT cte2.start_date, cte4.end_date
+FROM cte2
+JOIN cte4 USING(rnk)
+ORDER BY DATEDIFF(cte2.start_date,cte4.end_date) DESC
