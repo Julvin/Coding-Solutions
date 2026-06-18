@@ -1,3 +1,7 @@
+--Companies Hierarchy: Founder -> Lead Manager -> Senior Manager -> Manager -> Employee
+--Print the company_code, founder name, total number of lead managers, total number of senior managers, total number of managers, and total number of employees. 
+
+
 Solution 1
 WITH lm AS (
     SELECT company_code, COUNT(DISTINCT lead_manager_code) AS lmc
