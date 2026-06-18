@@ -1,0 +1,11 @@
+WITH RECURSIVE number AS(
+    SELECT 1 AS L
+    UNION ALL
+    
+    SELECT L + 1
+    FROM number
+    WHERE L < 20
+)
+
+SELECT REPEAT('* ', L)
+FROM number
