@@ -1,0 +1,8 @@
+# Write a solution to find the employees who earn more than their managers.
+
+-- 181. Employees Earning More Than Their Managers
+SELECT e1.name AS Employee
+FROM Employee e1
+LEFT JOIN Employee e2 
+ON e2.id = e1.managerId
+WHERE e1.Salary > e2.Salary
