@@ -1,0 +1,18 @@
+# Write a solution to find the number of times each student attended each exam.
+-- Return the result table ordered by student_id and subject_name.
+
+
+-- 1280. Students and Examinations
+SELECT data.student_id, data.student_name, data.subject_name, COALESCE(subject.attended_exams,0) as attended_exams
+FROM 
+(SELECT student_id, subject_name, COUNT(subject_name) as attended_exams
+FROM examinations
+GROUP BY student_id, subject_name) as subject
+
+RIGHT JOIN (
+    SELECT *
+    FROM students
+    CROSS JOIN subjects
+) as data
+ON data.student_id = subject.student_id and data.subject_name = subject.subject_name
+ORDER BY data.student_id, data.subject_name
