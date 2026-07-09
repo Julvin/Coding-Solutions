@@ -1,0 +1,15 @@
+# Write a solution to report the ids and the names of all managers, the number of employees who report directly to them, and the average age of the reports rounded to the nearest integer.
+-- For this problem, we will consider a manager an employee who has at least 1 other employee reporting to them.
+-- Return the result table ordered by employee_id.
+
+-- 1731. The Number of Employees Which Report to Each Employee
+SELECT 
+    b.employee_id, 
+    b.name, 
+    COUNT(a.employee_id) as reports_count, 
+    ROUND(AVG(a.age),0) as average_age
+FROM Employees a
+JOIN Employees b
+ON a.reports_to = b.employee_id
+GROUP BY b.employee_id
+ORDER BY b.employee_id
