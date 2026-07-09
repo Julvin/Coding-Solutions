@@ -1,0 +1,8 @@
+# Write a solution to find the daily active user count for a period of 30 days ending 2019-07-27 inclusively. A user was active on someday if they made at least one activity on that day.
+-- Any activity from ('open_session', 'end_session', 'scroll_down', 'send_message') will be considered valid activity for a user to be considered active on a day.
+
+ -- 1141. User Activity for the Past 30 Days I
+SELECT activity_date as day, COUNT(DISTINCT user_id) as active_users
+FROM activity
+WHERE DATEDIFF('2019-07-27', activity_date) < 30 AND activity_date <= '2019-07-27'
+GROUP BY activity_date
