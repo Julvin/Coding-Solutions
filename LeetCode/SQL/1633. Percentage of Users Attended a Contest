@@ -1,0 +1,15 @@
+# Write a solution to find the percentage of the users registered in each contest rounded to two decimals.
+-- Return the result table ordered by percentage in descending order. 
+-- In case of a tie, order it by contest_id in ascending order.
+
+-- 1633. Percentage of Users Attended a Contest
+SELECT 
+contest_id, 
+round(
+    (count(user_id)
+    /
+    (SELECT COUNT(DISTINCT user_id) FROM users))
+    *100,2) as percentage
+FROM register
+GROUP BY contest_id
+ORDER BY percentage DESC, contest_id ASC
