@@ -1,0 +1,19 @@
+# Write a solution to find the prices of all products on the date 2019-08-16.
+-- Initially, all products have price 10.
+
+
+-- 1164. Product Price at a Given Date
+WITH a AS (
+    SELECT 
+        product_id,
+        new_price,
+        change_date,
+        ROW_NUMBER() OVER (PARTITION BY product_id ORDER BY change_date DESC) AS rn
+    FROM products
+    WHERE change_date <='2019-08-16'                                
+)
+
+SELECT b.product_id, COALESCE(a.new_price,10) as price
+FROM (SELECT DISTINCT product_id FROM products) as b
+LEFT JOIN a
+ON b.product_id = a.product_id AND a.rn = 1
