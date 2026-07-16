@@ -1,0 +1,32 @@
+# Write a solution to find drivers whose fuel efficiency has improved by comparing their average fuel efficiency in the first half of the year with the second half of the year.
+-- Calculate fuel efficiency as distance_km / fuel_consumed for each trip
+-- First half: January to June, Second half: July to December
+-- Only include drivers who have trips in both halves of the year
+-- Calculate the efficiency improvement as (second_half_avg - first_half_avg)
+-- Round all results to 2 decimal places
+-- Return the result table ordered by efficiency improvement in descending order, then by driver name in ascending order.
+
+-- 3601. Find Drivers with Improved Fuel Efficiency
+WITH d AS
+(
+SELECT 
+    driver_id,
+    driver_name,
+    AVG(CASE WHEN period = 'first' THEN eff ELSE NULL END) AS first_half_avg,
+    AVG(CASE WHEN period = 'second' THEN eff ELSE NULL END) AS second_half_avg
+FROM
+(SELECT *, CASE WHEN MONTH(trip_date) < 7 THEN 'first' ELSE 'second' END AS period, distance_km/fuel_consumed AS eff 
+FROM trips
+JOIN drivers USING(driver_id)) as t
+GROUP BY driver_id
+)
+
+SELECT
+    driver_id,
+    driver_name,
+    ROUND(first_half_avg,2) AS first_half_avg,
+    ROUND(second_half_avg,2) AS second_half_avg,
+    ROUND(second_half_avg - first_half_avg,2) AS efficiency_improvement
+FROM d
+WHERE first_half_avg IS NOT NULL AND second_half_avg IS NOT NULL AND first_half_avg < second_half_avg
+ORDER BY efficiency_improvement DESC, driver_name ASC
