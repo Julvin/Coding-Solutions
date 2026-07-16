@@ -1,0 +1,13 @@
+# Write a solution to find the second highest distinct salary from the Employee table. 
+-- If there is no second highest salary, return null (return None in Pandas).
+
+-- 176. Second Highest Salary
+SELECT
+    (
+        SELECT DISTINCT salary as SecondHighestSalary
+        FROM(
+                SELECT
+                salary,
+                DENSE_RANK() OVER(ORDER BY salary DESC) AS r
+                FROM employee ) b
+        WHERE r = 2) SecondHighestSalary
