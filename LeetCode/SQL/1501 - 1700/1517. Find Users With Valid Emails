@@ -1,0 +1,15 @@
+# Write a solution to find the users who have valid emails.
+-- A valid e-mail has a prefix name and a domain where:
+--- The prefix name is a string that may contain letters (upper or lower case), digits, underscore '_', period '.', and/or dash '-'. The prefix name must start with a letter.
+--- The domain must be exactly '@leetcode.com' in lowercase.
+
+-- 1517. Find Users With Valid Emails
+SELECT *
+FROM users
+WHERE REGEXP_LIKE(mail, '^[a-zA-Z][a-zA-Z0-9_.-]*@leetcode[.]com$','c')
+
+Notes
+-- ^ : Start of the string
+-- * : 0 or more rept
+-- \\ or [] : make sure . is treated as literal text
+-- $ : ensure no str followed
