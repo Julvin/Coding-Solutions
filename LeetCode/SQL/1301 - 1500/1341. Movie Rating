@@ -1,0 +1,52 @@
+# Write a solution to:
+-- Find the name of the user who has rated the greatest number of movies. In case of a tie, return the lexicographically smaller user name.
+-- Find the movie name with the highest average rating in February 2020. In case of a tie, return the lexicographically smaller movie name.
+
+-- 1341. Movie Rating
+
+#Solution 1
+WITH a AS(
+    SELECT mr.movie_id, mr.user_id, mr.rating, mr.created_at,mv.title,u.name
+    FROM movierating mr
+    LEFT JOIN movies mv
+    ON mr.movie_id = mv.movie_id
+    LEFT JOIN users u
+    ON mr.user_id = u.user_id
+)
+
+(SELECT a.name as results
+FROM a
+GROUP BY a.user_id
+ORDER BY COUNT(a.user_id) DESC, a.name ASC
+LIMIT 1)
+
+UNION ALL
+
+(SELECT a.title as results
+FROM a
+WHERE a.created_at BETWEEN '2020-02-01' AND '2020-02-29'
+GROUP BY a.movie_id
+ORDER BY AVG(a.rating) DESC, a.title ASC
+LIMIT 1)
+
+#Solution 2
+SELECT name as results FROM
+(
+    SELECT user_id, name, COUNT(*)
+    FROM Users JOIN MovieRating USING(user_id)
+    GROUP BY 1,2
+    ORDER BY 3 DESC, 2 ASC
+    LIMIT 1
+) users
+
+UNION ALL
+
+SELECT title as results FROM
+(SELECT movie_id, title, AVG(rating)
+FROM movies JOIN MovieRating USING(movie_id)
+WHERE created_at BETWEEN '2020-02-01' AND '2020-02-29'
+##WHERE LEFT(created_at,7) = '2020-02'
+##WHERE DATE_FORMAT(created_at, '%Y-%m') = '2020-02'
+GROUP BY 1,2
+ORDER BY 3 DESC, 2 ASC
+LIMIT 1) movie
