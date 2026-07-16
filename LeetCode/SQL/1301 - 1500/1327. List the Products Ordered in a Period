@@ -1,0 +1,14 @@
+# Write a solution to get the names of products that have at least 100 units ordered in February 2020 and their amount.
+
+-- 1327. List the Products Ordered in a Period
+WITH a AS(
+    SELECT product_id, SUM(unit) as unit
+    FROM orders
+    WHERE LEFT(order_date,7) = '2020-02'
+    GROUP BY product_id
+)
+
+SELECT p.product_name, a.unit
+FROM products p
+LEFT JOIN a USING(product_id)
+WHERE a.unit >= 100
