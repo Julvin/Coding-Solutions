@@ -1,0 +1,34 @@
+# Write a solution to find employees who have consistently improved their performance over their last three reviews.
+-- An employee must have at least 3 review to be considered
+-- The employee's last 3 reviews must show strictly increasing ratings (each review better than the previous)
+-- Use the most recent 3 reviews based on review_date for each employee
+-- Calculate the improvement score as the difference between the latest rating and the earliest rating among the last 3 reviews
+-- Return the result table ordered by improvement score in descending order, then by name in ascending order.
+
+-- 3580. Find Consistently Improving Employees
+WITH a AS(
+    SELECT 
+        employee_id,
+        rating,
+        RANK() OVER (PARTITION BY employee_id ORDER BY review_date DESC) as ranking
+    FROM performance_reviews
+),
+b AS(
+SELECT
+    employee_id,
+    SUM(CASE WHEN ranking = 1 THEN rating END) AS r1,
+    SUM(CASE WHEN ranking = 2 THEN rating END) AS r2,
+    SUM(CASE WHEN ranking = 3 THEN rating END) AS r3
+FROM a
+WHERE ranking < 4
+GROUP BY employee_id
+)
+
+SELECT 
+    employee_id,
+    name,
+    r1-r3 AS improvement_score
+FROM b
+LEFT JOIN employees USING(employee_id)
+WHERE b.r1 IS NOT NULL AND b.r2 IS NOT NULL AND b.r3 IS NOT NULL AND b.r1 > b.r2  AND b.r2 > b.r3 
+ORDER BY improvement_score DESC, name ASC
