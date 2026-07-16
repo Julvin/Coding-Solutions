@@ -2,5 +2,5 @@ Here is the collection of the coding questions I have solved over time. I would 
 
 | Platform | Python Solutions| MySQL Solutions |
 | -------- | -------- | -------- |
-| LeetCode | 93 | 75 |
+| LeetCode | 93 | 79 |
 | HackerRank | 7 | 14 |
