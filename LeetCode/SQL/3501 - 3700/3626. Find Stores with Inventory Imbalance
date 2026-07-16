@@ -1,0 +1,42 @@
+# Write a solution to find stores that have inventory imbalance - stores where the most expensive product has lower stock than the cheapest product.
+-- For each store, identify the most expensive product (highest price) and its quantity
+-- For each store, identify the cheapest product (lowest price) and its quantity
+-- A store has inventory imbalance if the most expensive product's quantity is less than the cheapest product's quantity
+-- Calculate the imbalance ratio as (cheapest_quantity / most_expensive_quantity)
+-- Round the imbalance ratio to 2 decimal places
+-- Only include stores that have at least 3 different products
+-- Return the result table ordered by imbalance ratio in descending order, then by store name in ascending order.
+
+
+-- 3626. Find Stores with Inventory Imbalance
+WITH value AS (
+    SELECT store_id, MAX(price) as max_price, MIN(price) as min_price
+    FROM inventory
+    GROUP BY store_id
+    HAVING COUNT(store_id)>2
+),
+value2 AS(
+    SELECT 
+        v.store_id,
+        MAX(CASE WHEN i.price = v.max_price THEN i.product_name END) AS most_exp_product,
+        MAX(CASE WHEN i.price = v.min_price THEN i.product_name END) AS cheapest_product,
+        MAX(CASE WHEN i.price = v.max_price THEN i.quantity END) AS most_exp_quantity,
+        MAX(CASE WHEN i.price = v.min_price THEN i.quantity END) AS cheapest_quantity
+    FROM value v
+    JOIN inventory i USING(store_id)
+    GROUP BY v.store_id
+    HAVING most_exp_quantity < cheapest_quantity
+)
+
+#FROM inventory i JOIN value v ON i.store_id = v.store_id AND (i.price = v.max_price OR i.price = v.min_price)
+
+SELECT 
+    store_id,
+    s.store_name,
+    s.location,
+    v2.most_exp_product,
+    v2.cheapest_product,
+    ROUND(v2.cheapest_quantity/v2.most_exp_quantity,2) AS imbalance_ratio
+FROM value2 v2
+JOIN stores s USING(store_id)
+ORDER BY imbalance_ratio DESC, store_name ASC
