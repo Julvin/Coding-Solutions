@@ -1,0 +1,18 @@
+# Write a solution to find patients who have recovered from COVID - patients who tested positive but later tested negative.
+-- A patient is considered recovered if they have at least one Positive test followed by at least one Negative test on a later date
+-- Calculate the recovery time in days as the difference between the first positive test and the first negative test after that positive test
+-- Only include patients who have both positive and negative test results
+-- Return the result table ordered by recovery_time in ascending order, then by patient_name in ascending order.
+
+-- 3586. Find Covid Recovery Patients
+SELECT 
+    c1.patient_id,
+    p.patient_name,
+    p.age, 
+    DATEDIFF(MIN(c2.test_date),MIN(c1.test_date)) as recovery_time
+FROM covid_tests c1
+JOIN covid_tests c2 USING(patient_id)
+JOIN patients p ON c1.patient_id = p.patient_id
+WHERE (c1.test_date < c2.test_date) AND (c1.result = 'Positive') AND (c2.result = 'Negative')
+GROUP BY patient_id 
+ORDER BY recovery_time ASC, p.patient_name ASC
