@@ -1,0 +1,33 @@
+# Write a solution to Find Churn Risk Customers - users who show warning signs before churning. 
+-- A user is considered churn risk customer if they meet ALL the following criteria:
+--- Currently have an active subscription (their last event is not cancel).
+--- Have performed at least one downgrade in their subscription history.
+--- Their current plan revenue is less than 50% of their historical maximum plan revenue.
+--- Have been a subscriber for at least 60 days.
+-- Return the result table ordered by days_as_subscriber in descending order, then by user_id in ascending order.
+
+-- 3716. Find Churn Risk Customers
+WITH plan AS (
+    SELECT 
+        *,
+        ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY event_date DESC) AS event 
+    FROM subscription_events
+),
+plan2 AS(
+    SELECT 
+        user_id,
+        MAX(CASE WHEN event = 1 THEN plan_name END) AS current_plan,
+        MAX(CASE WHEN event = 1 THEN monthly_amount END) AS current_monthly_amount,
+        MAX(monthly_amount) AS max_historical_amount,
+        DATEDIFF(MAX(event_date), MIN(event_date)) AS days_as_subscriber
+    FROM plan
+    GROUP BY user_id
+)
+
+SELECT *
+FROM plan2
+WHERE 
+    current_plan IS NOT NULL AND
+    current_monthly_amount/max_historical_amount < 0.5 AND
+    days_as_subscriber >= 60
+ORDER BY days_as_subscriber DESC, user_id ASC
