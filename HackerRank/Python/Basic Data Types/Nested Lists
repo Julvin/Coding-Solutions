@@ -1,0 +1,18 @@
+if __name__ == '__main__':
+    
+    names = []
+    
+    for _ in range(int(input())):
+        name = input()
+        score = float(input())
+        names.append([name,score])    
+    
+    names.sort()
+    grade = [x[1] for x in names]
+    grades = list(set(grade))
+    grades.sort()
+    rank2 = grades[1]
+        
+    for x in names:
+        if x[1] == rank2:
+            print(x[0])
