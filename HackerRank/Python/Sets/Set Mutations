@@ -1,0 +1,25 @@
+You are given a set A and N number of other sets. These N number of sets have to perform some specific mutation operations on set A.
+
+Your task is to execute those operations and print the sum of elements from set A.
+
+Code:
+a = int(input())
+b = set(map(int,input().split(' ')))
+
+n = int(input())
+
+for _ in range(n):
+    command, lenght = input().split(' ')
+    other_set = set(map(int,input().split(' ')))
+
+    if command == 'intersection_update':
+        b &= other_set
+    elif command == 'update':
+        b |= other_set
+    elif command == 'symmetric_difference_update':
+        b ^= other_set
+    elif command == 'difference_update':
+        b -= other_set
+    
+print(sum(b))
+    
