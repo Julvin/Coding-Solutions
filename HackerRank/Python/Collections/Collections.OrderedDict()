@@ -1,0 +1,19 @@
+You are the manager of a supermarket.
+You have a list of N items together with their prices that consumers bought on a particular day.
+Your task is to print each item_name and net_price in order of its first occurrence.
+
+Code:
+from collections import OrderedDict
+
+dict = {}
+
+for _ in range(int(input())):
+    a, b = input().rsplit(" ", 1)
+    
+    if a in dict:
+        dict[a] += int(b)
+    
+    else: dict[a] = int(b)
+    
+for a,b in dict.items():
+    print(a, b)
