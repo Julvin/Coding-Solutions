@@ -1,0 +1,42 @@
+There is a horizontal row of  cubes. The length of each cube is given. You need to create a new vertical pile of cubes. The new pile should follow these directions: if cube[i] is on top of cube[j] then sidelenght[j] >= sidelenght[i].
+
+When stacking the cubes, you can only pick up either the leftmost or the rightmost cube each time. Print Yes if it is possible to stack the cubes. Otherwise, print No.
+
+from collections import deque
+
+t = int(input())
+
+for _ in range(t):
+    n = int(input())
+    cubes = deque(map(int, input().split()))
+
+    top = max(cubes)
+
+    if cubes[0] != top and cubes[-1] != top:
+        print("No")
+        continue
+
+    # Remove the maximum cube
+    if cubes[0] == top:
+        cubes.popleft()
+    else:
+        cubes.pop()
+
+    possible = True
+
+    while cubes:
+        left = cubes[0]
+        right = cubes[-1]
+
+        if left > top and right > top:
+            possible = False
+            break
+
+        if left >= right:
+            chosen = cubes.popleft()
+        else:
+            chosen = cubes.pop()
+
+        top = chosen
+
+    print("Yes" if possible else "No")
